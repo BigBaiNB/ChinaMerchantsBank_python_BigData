@@ -15,6 +15,10 @@ train_log = sort_the_input_path + 'train_log.csv'
 pre_train_log = sort_the_input_path + 'pre_train_log.csv'
 pre_train_log_EVT = sort_the_input_path + 'pre_train_log_EVT.csv'
 pre_train_log_TCH = sort_the_input_path + 'pre_train_log_TCH.csv'
+pre_EVT_table = sort_the_input_path + 'pre_EVT_table.csv'
+pre_EVT_flg = sort_the_input_path + 'pre_EVT_flg.csv'
+
+all_train_log_vertor = sort_the_input_path + 'vertor_all_information.csv'
 
 sort_the_test_path = r'C:\\Users\\Administrator\\Desktop\\big_data\\df_ctf_trafic_bank\\data\\input\\test\\'
 test_agg = sort_the_test_path + 'test_agg.csv'

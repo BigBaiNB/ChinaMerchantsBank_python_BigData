@@ -3,6 +3,8 @@ import pandas as pd
 from data_path import *
 import codecs
 
+EVT_SIZE = 595#默认的EVT表识别的个数，在groupby中会重新计算并更新
+TCH_SIZE = 3
 def manage_the_data(original_data):
     #处理原始数据，分割为id click_number(点击次数) EVT_LBL(模块名称) Most_TCH_TYP(最多的点击方式)
     the_information = []
@@ -13,11 +15,39 @@ def manage_the_data(original_data):
 def change_the_EVT_LBL(string_data):
     #去除EVT_LBL中的‘-’
     # new_RVT_LBL = string_data.replace('-','')
-    new_RVT_LBL = string_data.split('-')
+    #只保留最后一个数据作为特征值
+    new_RVT_LBL = int(string_data.split('-').pop())
     return new_RVT_LBL
 
+def creat_EVT_vector():
+    #创建EVT_VERTOR向量
+    all_the_information = []
 
+    data = pd.read_csv(train_log)
+    for usrid,evt in zip(data['USRID'],data['EVT_LBL']):
+        tem = dict()
+        tem['USRID']=usrid
+        tem['EVT_LBL'] = int(evt.split('-').pop())
+        # print(type(int(evt.split('-').pop())))
+        # break
+        all_the_information.append(tem)
 
+    all_data = pd.DataFrame(all_the_information)#注意必须加行号，不然你后面怎么读？
+    # all_data.to_csv()
+    evt_data_deal = set(all_data['EVT_LBL'])#排序，只能对整数排序
+    EVT_vetor = [x for x in evt_data_deal]
+    EVT_vetor.sort()
+    # print(len(EVT_vetor))
+    # print(EVT_vetor)
+    return EVT_vetor
+
+def EVT_Name(size):
+    name = []
+    for i in range(size):
+        name.append('EVT'+str(i))
+    return name
+
+    
 def data_groupby(groups):
     """
     作用：
@@ -27,9 +57,17 @@ def data_groupby(groups):
     """
     # list_userID = []
     all_the_information = []
+    EVT_Vector_list = creat_EVT_vector()
+    EVT_SIZE = len(EVT_Vector_list)#总共有多少的EVT标识
+
+    EVT_Zero_Vector = np.zeros((len(groups),EVT_SIZE),dtype=np.int)#构建0矩阵用于数据填充
+    TCH_TYP_Zero_Vector = np.zeros((len(groups),TCH_SIZE),dtype=np.int)#共计3列，每列为APP，web，h5
+    
+    # print(EVT_Zero_Vector.shape)
+    i = 0#记录当前行 
     #排序特征
     for uesid,group in groups:
-        list_EVT = []
+        
         # list_TYP = []
         app_x = 0
         web_y = 0
@@ -37,44 +75,61 @@ def data_groupby(groups):
 
         tem = dict()
         num = 0
-        tem['USRID'] = uesid
 
         for evt,tch in zip(group['EVT_LBL'],group['TCH_TYP']):
             # print(evt)
             # print(tch)
-            list_EVT += change_the_EVT_LBL(evt)
+            evt_number = change_the_EVT_LBL(evt)
+            index_evt = EVT_Vector_list.index(evt_number)
+            EVT_Zero_Vector[i,index_evt] += 1
+            # print(index_evt,evt_number,sep='|')
             num += 1
-            if evt==0:
-                app_x += 1
-            elif evt==1:
-                web_y += 1
-            elif evt==2:
-                h5_z += 1
-       
-        tem['EVT_LBL'] = list_EVT
+            if tch==0:
+                TCH_TYP_Zero_Vector[i,0] += 1#app
+            elif tch==1:
+                TCH_TYP_Zero_Vector[i,1] += 1#web
+            elif tch==2:
+                TCH_TYP_Zero_Vector[i,2] += 1#h5
+
+        tem['USRID'] = uesid
         tem['Click_Num'] = num
         # print(num)
         # if(num == 9):
         #     print(list_TYP)
         #     break
-        
-        tem['TCH_TYP'] = [app_x,web_y,h5_z]
         all_the_information.append(tem)
-    return pd.DataFrame(all_the_information,columns=['USRID','EVT_LBL','Click_Num','TCH_TYP'])
+        i += 1
+    first_df = pd.DataFrame(all_the_information,columns=['USRID','Click_Num'])
+    EVT_df = pd.DataFrame(EVT_Zero_Vector,columns=EVT_Name(EVT_SIZE))
+    TCH_df = pd.DataFrame(TCH_TYP_Zero_Vector,columns=['APP','WEB','H5'])
+
+    new_df = first_df.join(EVT_df).join(TCH_df)
+    # print(first_df)
+    # new_df = pd.merge(first_df,EVT_df)
+    # new_df = pd.merge(new_df,TCH_df)
+    new_df.to_csv(all_train_log_vertor,index=False)
+    # print(type(new_df))
+    # print(new_df[0,0])
+    print('..............finish')
+
+# def 
 
 def split_to_csv(data):
     """
     保存特征到文件
     """
-    data.to_csv(pre_train_log,index=False,columns=['USRID','EVT_LBL','Click_Num','TCH_TYP'])
-    data[['USRID','EVT_LBL','Click_Num']].to_csv(pre_train_log_EVT,index=False,columns=['USRID','EVT_LBL','Click_Num'])
-    data[['USRID','TCH_TYP','Click_Num']].to_csv(pre_train_log_TCH,index=False,columns=['USRID','TCH_TYP','Click_Num'])
+    # data.to_csv(pre_train_log,index=False,columns=['USRID','EVT_LBL','Click_Num','TCH_TYP'])
+    list_name = ['USRID','Click_Num']
+    list_name.extend(EVT_Name(EVT_SIZE))
+    # print(len(list_name))
+    data.to_csv(pre_train_log_EVT,index=False,columns=list_name)
+    # data.to_csv(pre_train_log_TCH,index=False,columns=['USRID','Click_Num','APP','WEB','H5'])
     print('-----finish')
 
 
 if __name__ == '__main__':
-    print(change_the_EVT_LBL('163-577-913'))
-    print(type(change_the_EVT_LBL('163-577-913')))
+    # print(change_the_EVT_LBL('163-577-913'))
+    # print(type(change_the_EVT_LBL('163-577-913')))
     # data = pd.read_csv(train_log)
     # print(type(data))
     # a = data_groupby(data)
@@ -83,12 +138,21 @@ if __name__ == '__main__':
     # print(data)
     # new_group_data = data.groupby('USRID')['EVT_LBL','OCC_TIM','TCH_TYP'].apply(data_groupby)
     # new_group_data = data_groupby(data.groupby('USRID')['EVT_LBL','OCC_TIM','TCH_TYP'])
-    # print(new_group_data['TCH_TYP'][:1])
+    # data_groupby(data.groupby('USRID')['EVT_LBL','OCC_TIM','TCH_TYP'])
+    # print(type(data.groupby('USRID')['EVT_LBL','OCC_TIM','TCH_TYP']))
+    # print(new_group_data[['EVT_LBL','Click_Num']][:1])
     # split_to_csv(new_group_data)
     # print(dict(list(new_group_data)))
     
     # print(pd.DataFrame(new_group_data,columns=['USRID','EVT_LBL','OCC_TIM','TCH_TYP']))
+    # print(creat_EVT_vector(pd.read_csv(pre_train_log_EVT)))
+    # creat_EVT_vector()
 
-    
+    data = pd.read_csv(all_train_log_vertor)
+    split_to_csv(data)
+    # list = ['USRID','Click_Num']
+    # list.extend(EVT_Name(EVT_SIZE))
+    # list = EVT_Name(EVT_SIZE)
+    # print(list)
 
 

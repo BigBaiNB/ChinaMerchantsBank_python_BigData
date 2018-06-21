@@ -15,15 +15,26 @@ train_log = sort_the_input_path + 'train_log.csv'
 pre_train_log = sort_the_input_path + 'pre_train_log.csv'
 pre_train_log_EVT = sort_the_input_path + 'pre_train_log_EVT.csv'
 pre_train_log_TCH = sort_the_input_path + 'pre_train_log_TCH.csv'
-pre_EVT_table = sort_the_input_path + 'pre_EVT_table.csv'
-pre_EVT_flg = sort_the_input_path + 'pre_EVT_flg.csv'
-
 all_train_log_vertor = sort_the_input_path + 'vertor_all_information.csv'
+
+pre_train_EVT_table = sort_the_input_path + 'pre_EVT_table.csv'
+pre_train_EVT_Name_table = sort_the_input_path + 'pre_train_EVT_Name_table.csv'
+pre_train_EVT_flg = sort_the_input_path + 'pre_EVT_flg.csv'
+pre_train_UserID_EVT_Evalute = sort_the_input_path + 'pre_train_UserID_EVT_Evalute.csv'
+
+the_input_path = r'C:\\Users\\Administrator\\Desktop\\big_data\\df_ctf_trafic_bank\\data\\input\\'
+pre_all_evt_evalute = the_input_path + 'pre_all_evt_evalute.csv'
+# pre_temp = sort_the_input_path+'temp.csv'
+
 
 sort_the_test_path = r'C:\\Users\\Administrator\\Desktop\\big_data\\df_ctf_trafic_bank\\data\\input\\test\\'
 test_agg = sort_the_test_path + 'test_agg.csv'
 test_log = sort_the_test_path + 'test_log.csv'
 
+pre_test_log_EVT = sort_the_test_path + 'pre_test_log_EVT.csv'
+pre_test_log_TCH = sort_the_test_path + 'pre_test_log_TCH.csv'
+all_test_log_vertor = sort_the_test_path + 'vertor_test_all_information.csv'
+pre_test_UserID_EVT_Evalute = sort_the_test_path + 'pre_test_UserID_EVT_Evalute.csv'
 
 all_the_out_path = r'C:\\Users\\Administrator\\Desktop\\big_data\\df_ctf_trafic_bank\\data\\output\\'
 result_path = all_the_out_path + 'test_result.csv'

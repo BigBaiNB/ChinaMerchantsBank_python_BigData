@@ -22,9 +22,14 @@ pre_train_EVT_Name_table = sort_the_input_path + 'pre_train_EVT_Name_table.csv'
 pre_train_EVT_flg = sort_the_input_path + 'pre_EVT_flg.csv'
 pre_train_UserID_EVT_Evalute = sort_the_input_path + 'pre_train_UserID_EVT_Evalute.csv'
 
+pre_train_Time = sort_the_input_path + 'pre_train_Time.csv'
+
+pre_train_both_have_data = sort_the_input_path + 'pre_train_both_have_data.csv'
+pre_train_not_in_data = sort_the_input_path + 'pre_train_not_in_data.csv'
+
 the_input_path = r'C:\\Users\\Administrator\\Desktop\\big_data\\df_ctf_trafic_bank\\data\\input\\'
 pre_all_evt_evalute = the_input_path + 'pre_all_evt_evalute.csv'
-# pre_temp = sort_the_input_path+'temp.csv'
+pre_temp = sort_the_input_path+'temp.csv'
 
 
 sort_the_test_path = r'C:\\Users\\Administrator\\Desktop\\big_data\\df_ctf_trafic_bank\\data\\input\\test\\'
@@ -35,6 +40,11 @@ pre_test_log_EVT = sort_the_test_path + 'pre_test_log_EVT.csv'
 pre_test_log_TCH = sort_the_test_path + 'pre_test_log_TCH.csv'
 all_test_log_vertor = sort_the_test_path + 'vertor_test_all_information.csv'
 pre_test_UserID_EVT_Evalute = sort_the_test_path + 'pre_test_UserID_EVT_Evalute.csv'
+
+pre_test_both_have_data = sort_the_test_path + 'pre_test_both_have_data.csv'
+pre_test_not_in_data = sort_the_test_path + 'pre_test_not_in_data.csv'
+
+pre_test_Time = sort_the_test_path + 'pre_test_Time.csv'
 
 all_the_out_path = r'C:\\Users\\Administrator\\Desktop\\big_data\\df_ctf_trafic_bank\\data\\output\\'
 result_path = all_the_out_path + 'test_result.csv'

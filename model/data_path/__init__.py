@@ -30,6 +30,8 @@ pre_train_not_in_data = sort_the_input_path + 'pre_train_not_in_data.csv'
 the_input_path = r'C:\\Users\\Administrator\\Desktop\\big_data\\df_ctf_trafic_bank\\data\\input\\'
 pre_all_evt_evalute = the_input_path + 'pre_all_evt_evalute.csv'
 pre_temp = sort_the_input_path+'temp.csv'
+pre_temp_train_x = sort_the_input_path+'tem_train_x.csv'
+pre_test_x = sort_the_input_path+'tem_tst_x.csv'
 
 
 sort_the_test_path = r'C:\\Users\\Administrator\\Desktop\\big_data\\df_ctf_trafic_bank\\data\\input\\test\\'

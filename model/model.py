@@ -121,20 +121,20 @@ def pretict_withot_feature(both_have_file,not_in_agg_file,log_file):
 
     #需要调整的参数
     param_test_1 = {  
-        'n_estimators': range(10, 100, 2)
+        'n_estimators': range(10, 101, 5)
     }
 
     param_test_2 = {
-        'min_samples_leaf':range(1, 30, 1),
+        'min_samples_leaf':range(1, 31, 2),
         'min_samples_split':range(20,201,10)
     }
 
     param_test_3 = {
-        'max_features': range(1,25,1)
+        'max_features': range(3,31,1)
     }
 
     parameter = {
-        'max_features': 1,
+        'max_features': 'auto',
         'min_samples_leaf':1,
         'min_samples_split':2,
         'n_estimators': 10
@@ -157,30 +157,30 @@ def pretict_withot_feature(both_have_file,not_in_agg_file,log_file):
         {'n_estimators':60},  
         0.8211334476626017)  
         """
-        train_way = RandomForestRegressor(n_estimators=parameter['n_estimators'],min_samples_leaf=parameter['min_samples_leaf'],max_features=parameter['max_features'],min_samples_split=parameter['min_samples_split'],random_state=50,oob_score=True)
-        for i in range(1,3):
+        train_way = RandomForestRegressor(n_estimators=parameter['n_estimators'],min_samples_leaf=parameter['min_samples_leaf'],max_features=parameter['max_features'],min_samples_split=parameter['min_samples_split'],random_state=50)
+        for a in range(1,4):
             param_test = param_test_1
-            if i==2:
+            if a==2:
                 param_test = param_test_2
-            elif i==3:
+            elif a==3:
                 param_test = param_test_3
 
             gsearch = GridSearchCV(train_way, param_grid=param_test,cv=5 ) 
             gsearch.fit(X,y=Y)
             parameter.update(gsearch.best_params_)
-            train_way = RandomForestRegressor(n_estimators=parameter['n_estimators'],min_samples_leaf=parameter['min_samples_leaf'],max_features=parameter['max_features'],min_samples_split=parameter['min_samples_split'],random_state=50,oob_score=True)
-            print(i)
+            train_way = RandomForestRegressor(n_estimators=parameter['n_estimators'],min_samples_leaf=parameter['min_samples_leaf'],max_features=parameter['max_features'],min_samples_split=parameter['min_samples_split'],random_state=50)
+            print(a)
         # train_way = RandomForestRegressor(n_estimators=parameter['n_estimators'],min_samples_leaf=parameter['min_samples_leaf'],max_features=parameter['max_features'],min_samples_split=parameter['min_samples_split'],random_state=50,oob_score=True)
+        train_way.fit(X,Y)
         predict_y = train_way.predict(not_in_data)
         # print(type(predict_y)) 返回是一个array
         # Cross_validation_data(X,Y,train_way)
         print(predict_y)
         print(parameter)
-        pd.DataFrame(predict_y.tolist()).to_csv({'Time':pre_temp},index=False)
+        # pd.DataFrame(predict_y.tolist()).to_csv({'Time':pre_temp},index=False)
         break
 
 
 pretict_withot_feature(pre_test_both_have_data,pre_test_not_in_data,pre_test_Time)
-
 
 

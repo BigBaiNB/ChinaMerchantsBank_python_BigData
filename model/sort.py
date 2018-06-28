@@ -27,4 +27,12 @@ sorted_obj : DataFrame
 # pd.read_csv(original_test_log,sep='\t').sort_values(by=['USRID','OCC_TIM']).to_csv(test_log,index=False)
 # pd.read_csv(original_train_agg,sep='\t').sort_values(by=['USRID']).to_csv(train_agg,index=False)
 # pd.read_csv(original_train_flg,sep='\t').sort_values(by=['USRID']).to_csv(train_flg,index=False)
-pd.read_csv(original_train_log,sep='\t').sort_values(by=['USRID','OCC_TIM']).to_csv(train_log,index=False)
+# pd.read_csv(original_train_log,sep='\t').sort_values(by=['USRID','OCC_TIM']).to_csv(train_log,index=False)
+def get_rst(a):
+    i = 0
+    if a*100 > 1:
+        i = 1
+    return i
+data = pd.read_csv(result_path,sep='\t',engine='python')
+data['RST'] = data.RST.map(get_rst)
+print(data)
